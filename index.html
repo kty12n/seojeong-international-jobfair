@@ -360,6 +360,21 @@ body {
   line-height: 2;
   font-family: var(--font-ko);
 }
+.company-tooltip {
+  background: var(--navy) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-size: 11px !important;
+  font-family: var(--font-ko) !important;
+  font-weight: 500 !important;
+  padding: 4px 8px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+  white-space: nowrap !important;
+}
+.company-tooltip::before {
+  border-top-color: var(--navy) !important;
+}
 
 /* TABLE */
 .table-section {
@@ -878,7 +893,15 @@ function updateMap(rows) {
         ${r.session === '실시' ? `<span class="popup-badge">📋 기업설명회 실시 ${r.sesTime ? '· ' + r.sesTime : ''}</span>` : ''}
       </div>`;
 
-    const m = L.marker(r.coord, { icon }).addTo(mapInstance).bindPopup(popup, { maxWidth: 280 });
+    const m = L.marker(r.coord, { icon })
+      .addTo(mapInstance)
+      .bindPopup(popup, { maxWidth: 280 })
+      .bindTooltip(r.name, {
+        permanent: false,
+        direction: 'top',
+        offset: [0, -10],
+        className: 'company-tooltip'
+      });
     markers.push(m);
   });
 
@@ -894,14 +917,20 @@ function updateMap(rows) {
 // 테이블 업데이트
 // ──────────────────────────────────────────────
 function updateTable(rows) {
-  // 필터 카운트
+  // 필터 카운트 — 산업체 기준 (고유 산업체)
   const companies = uniqueCompanies(rows);
-  document.getElementById('cnt-all').textContent = rows.length;
-  document.getElementById('cnt-direct').textContent = rows.filter(r => r.type === '직접').length;
-  document.getElementById('cnt-indirect').textContent = rows.filter(r => r.type === '간접').length;
-  document.getElementById('cnt-am').textContent = rows.filter(r => r.time === '오전').length;
-  document.getElementById('cnt-pm').textContent = rows.filter(r => r.time === '오후').length;
-  document.getElementById('cnt-session').textContent = companies.filter(r => r.session === '실시').length;
+  const directCo = uniqueCompanies(rows.filter(r => r.type === '직접'));
+  const indirectCo = uniqueCompanies(rows.filter(r => r.type === '간접'));
+  const amCo = uniqueCompanies(rows.filter(r => r.time === '오전'));
+  const pmCo = uniqueCompanies(rows.filter(r => r.time === '오후'));
+  const sessionCo = companies.filter(r => r.session === '실시');
+
+  document.getElementById('cnt-all').textContent = companies.length;
+  document.getElementById('cnt-direct').textContent = directCo.length;
+  document.getElementById('cnt-indirect').textContent = indirectCo.length;
+  document.getElementById('cnt-am').textContent = amCo.length;
+  document.getElementById('cnt-pm').textContent = pmCo.length;
+  document.getElementById('cnt-session').textContent = sessionCo.length;
 
   renderTable();
 }
