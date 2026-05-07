@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">`
+<title>2026년 서정대학교 국제 학생 채용박람회 참여 현황</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
+<style>
+:root {
+  --navy: #1B2F5E;
+  --navy-light: #2A4580;
+  --navy-pale: #EEF1F8;
+  --magenta: #C0006A;
+  --magenta-light: #D4007A;
+  --magenta-pale: #FCEEF5;
+  --white: #ffffff;
+  --gray-50: #F8F9FB;
+  --gray-100: #F0F2F6;
+  --gray-200: #DDE1EA;
+  --gray-500: #8892A4;
+  --gray-700: #4A5568;
+  --gray-900: #1A202C;
+  --font-ko: 'Noto Sans KR', sans-serif;
+  --font-display: 'DM Serif Display', serif;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-ko);
+  background: var(--gray-50);
+  color: var(--gray-900);
+  min-height: 100vh;
+}
+
+/* HEADER */
+.header {
+  background: var(--navy);
+  color: white;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 12px rgba(27,47,94,0.18);
+}
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.logo-box {
+  width: 38px;
+  height: 38px;
+  background: var(--magenta);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.3;
+  text-align: center;
+  flex-shrink: 0;
+}
+.header-title-wrap h1 {
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.3;
+}
+.header-title-wrap p {
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  margin-top: 1px;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.sync-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: var(--magenta);
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 12px;
+  font-family: var(--font-ko);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.sync-btn:hover { background: var(--magenta-light); }
+.sync-btn svg { width: 14px; height: 14px; }
+.sync-btn.loading svg { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.last-updated {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+}
+
+/* HERO BANNER */
+.hero {
+  background: var(--navy);
+  color: white;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 3px solid var(--magenta);
+}
+.hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+.hero-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--magenta);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.hero-main-title {
+  font-family: var(--font-ko);
+  font-size: 26px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+.hero-sub {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+}
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.status-text { font-size: 12px; color: rgba(255,255,255,0.55); }
+
+/* MAIN LAYOUT */
+.main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* METRICS */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 1.5rem;
+}
+.metric-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 1.2rem 1.4rem;
+  border: 1px solid var(--gray-200);
+  border-left: 4px solid var(--navy);
+  transition: transform 0.15s;
+}
+.metric-card:hover { transform: translateY(-2px); }
+.metric-card.accent { border-left-color: var(--magenta); }
+.metric-label {
+  font-size: 11px;
+  color: var(--gray-500);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.metric-label svg { width: 14px; height: 14px; }
+.metric-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1;
+  margin-bottom: 5px;
+}
+.metric-card.accent .metric-value { color: var(--magenta); }
+.metric-sub {
+  font-size: 11px;
+  color: var(--gray-500);
+}
+
+/* SECTION TITLE */
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 15px;
+  background: var(--magenta);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* CHARTS */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 1.5rem;
+}
+.chart-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 1.2rem 1.4rem;
+  border: 1px solid var(--gray-200);
+}
+.legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--gray-700);
+}
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.chart-wrap {
+  position: relative;
+}
+
+/* MAP */
+.map-section {
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-200);
+  overflow: visible;
+  margin-bottom: 1.5rem;
+}
+.map-header {
+  padding: 1.2rem 1.4rem 1rem;
+  border-bottom: 1px solid var(--gray-100);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: white;
+  position: relative;
+  z-index: 2;
+}
+.map-hint {
+  font-size: 11px;
+  color: var(--gray-500);
+  margin-top: 3px;
+  font-weight: 400;
+}
+#map {
+  width: 100%;
+  height: 440px;
+  z-index: 1;
+  position: relative;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  display: block;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 10px !important;
+  padding: 0 !important;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+}
+.leaflet-popup-content { margin: 0 !important; width: 260px !important; }
+.popup-inner { padding: 14px; font-family: var(--font-ko); }
+.popup-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--navy);
+  line-height: 1.4;
+}
+.popup-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 5px;
+  gap: 8px;
+}
+.popup-label {
+  font-size: 11px;
+  color: var(--gray-500);
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+.popup-val {
+  font-size: 11px;
+  color: var(--gray-900);
+  font-weight: 500;
+  text-align: right;
+  line-height: 1.4;
+}
+.popup-val.highlight { color: var(--magenta); font-weight: 700; font-size: 13px; }
+.popup-badge {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 3px 8px;
+  background: var(--magenta-pale);
+  color: var(--magenta);
+  font-size: 10px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.map-legend {
+  background: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  border: 1px solid var(--gray-200);
+  line-height: 2;
+  font-family: var(--font-ko);
+}
+.company-tooltip {
+  background: var(--navy) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-size: 11px !important;
+  font-family: var(--font-ko) !important;
+  font-weight: 500 !important;
+  padding: 4px 8px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+  white-space: nowrap !important;
+}
+.company-tooltip::before {
+  border-top-color: var(--navy) !important;
+}
+
+/* TABLE */
+.table-section {
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.table-header {
+  padding: 1.2rem 1.4rem 0.8rem;
+  border-bottom: 1px solid var(--gray-100);
+}
+.filter-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.fbtn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--navy);
+  background: transparent;
+  color: var(--navy);
+  font-size: 11px;
+  font-family: var(--font-ko);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.fbtn:hover { background: var(--navy-pale); }
+.fbtn.active { background: var(--navy); color: white; }
+.fbtn.mag { border-color: var(--magenta); color: var(--magenta); }
+.fbtn.mag:hover { background: var(--magenta-pale); }
+.fbtn.mag.active { background: var(--magenta); color: white; }
+.count-badge {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 6px;
+  background: var(--gray-100);
+  border-radius: 10px;
+  font-size: 10px;
+  color: var(--gray-500);
+}
+.fbtn.active .count-badge { background: rgba(255,255,255,0.25); color: white; }
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+thead tr {
+  background: var(--navy);
+  color: white;
+}
+th {
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 11px;
+  white-space: nowrap;
+}
+td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--gray-100);
+  color: var(--gray-900);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--navy-pale); }
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.b-navy { background: var(--navy-pale); color: var(--navy); }
+.b-mag { background: var(--magenta-pale); color: var(--magenta); }
+.b-gray { background: var(--gray-100); color: var(--gray-700); }
+.b-green { background: #eaf3de; color: #27500a; }
+.b-amber { background: #faeeda; color: #633806; }
+.table-no-data {
+  padding: 3rem;
+  text-align: center;
+  color: var(--gray-500);
+  font-size: 13px;
+}
+
+/* FOOTER */
+.footer {
+  background: var(--navy);
+  color: rgba(255,255,255,0.45);
+  text-align: center;
+  padding: 1.5rem 2rem;
+  font-size: 11px;
+  line-height: 1.8;
+}
+.footer strong { color: rgba(255,255,255,0.7); }
+
+/* NOTICE BAR */
+.notice-bar {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #92400e;
+  margin-bottom: 1.5rem;
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+.notice-bar.show { display: flex; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .charts-grid { grid-template-columns: 1fr; }
+  .hero-main-title { font-size: 20px; }
+}
+@media (max-width: 600px) {
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
+  .main { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-logo">
+      <div class="logo-box">서정<br>대학</div>
+      <div class="header-title-wrap">
+        <h1>서정대학교 채용박람회</h1>
+        <p>Seojeong University Job Fair 2026</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="last-updated" id="lastUpdated">—</span>
+      <button class="sync-btn" id="syncBtn" onclick="loadData()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 4v6h6M23 20v-6h-6"/>
+          <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+        </svg>
+        데이터 새로고침
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">2026 Job Fair Dashboard</div>
+    <h2 class="hero-main-title">2026년 서정대학교 국제 학생 채용박람회 참여 현황</h2>
+    <p class="hero-sub">Seojeong University International Student Job Fair — Participation Status</p>
+    <div class="status-bar">
+      <span class="status-dot"></span>
+      <span class="status-text" id="statusText">구글 시트에서 데이터를 불러오는 중...</span>
+    </div>
+  </div>
+</section>
+
+<main class="main">
+
+  <!-- NOTICE BAR -->
+  <div class="notice-bar" id="noticeBar">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16.01"/></svg>
+    <span id="noticeText"></span>
+  </div>
+
+  <!-- METRICS -->
+  <div class="metrics-grid" id="metricsGrid">
+    <div class="metric-card">
+      <div class="metric-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        참여 산업체 수
+      </div>
+      <div class="metric-value" id="m1">—</div>
+      <div class="metric-sub" id="m1sub">로딩 중...</div>
+    </div>
+    <div class="metric-card accent">
+      <div class="metric-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        총 모집인원
+      </div>
+      <div class="metric-value" id="m2">—</div>
+      <div class="metric-sub" id="m2sub">로딩 중...</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        기업설명회 실시
+      </div>
+      <div class="metric-value" id="m3">—</div>
+      <div class="metric-sub">직접참여 기업 중</div>
+    </div>
+    <div class="metric-card accent">
+      <div class="metric-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        면접 예정 인원
+      </div>
+      <div class="metric-value" id="m4">—</div>
+      <div class="metric-sub">집계 가능 기업 기준</div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="section-title">직접 / 간접 참여 비율</div>
+      <div class="legend-row" id="leg1"></div>
+      <div class="chart-wrap" style="height:160px"><canvas id="c1" role="img" aria-label="직접/간접 참여 비율 도넛 차트"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="section-title">참여 시간대 분포</div>
+      <div class="legend-row" id="leg2"></div>
+      <div class="chart-wrap" style="height:160px"><canvas id="c2" role="img" aria-label="시간대 분포 파이 차트"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="section-title">추천기관별 산업체 수</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="c3" role="img" aria-label="추천기관별 산업체 수 막대 차트"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="section-title">모집분야별 인원 (상위 10)</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="c4" role="img" aria-label="모집분야별 인원 막대 차트"></canvas></div>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-section">
+    <div class="map-header">
+      <div class="section-title" style="margin-bottom:2px">산업체 위치 지도</div>
+      <p class="map-hint">마커를 클릭하면 직무내용 및 면접 예정 인원을 확인할 수 있습니다 &nbsp;|&nbsp; 네이비 = 직접참여 &nbsp; 마젠타 = 간접참여</p>
+    </div>
+    <div id="map"></div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-section">
+    <div class="table-header">
+      <div class="section-title" style="margin-bottom:4px">산업체 목록 <span style="font-size:11px;color:var(--gray-500);font-weight:400">— 모집분야별 전체 행 표시</span></div>
+      <div class="filter-row" id="filterRow">
+        <button class="fbtn active" data-filter="all">전체 <span class="count-badge" id="cnt-all">—</span></button>
+        <button class="fbtn" data-filter="직접">직접참여 <span class="count-badge" id="cnt-direct">—</span></button>
+        <button class="fbtn mag" data-filter="간접">간접참여 <span class="count-badge" id="cnt-indirect">—</span></button>
+        <button class="fbtn" data-filter="오전">오전 <span class="count-badge" id="cnt-am">—</span></button>
+        <button class="fbtn" data-filter="오후">오후 <span class="count-badge" id="cnt-pm">—</span></button>
+        <button class="fbtn mag" data-filter="설명회">기업설명회 <span class="count-badge" id="cnt-session">—</span></button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40px">번호</th>
+            <th style="min-width:140px">산업체명</th>
+            <th style="width:70px">유형</th>
+            <th style="width:55px">시간</th>
+            <th style="min-width:150px">주소</th>
+            <th style="width:70px">근무지</th>
+            <th style="min-width:110px">모집분야</th>
+            <th style="min-width:150px">직무내용</th>
+            <th style="width:50px">모집</th>
+            <th style="width:60px">설명회</th>
+            <th style="width:55px">면접예정</th>
+            <th style="min-width:100px">추천기관</th>
+          </tr>
+        </thead>
+        <tbody id="tb"></tbody>
+      </table>
+      <div class="table-no-data" id="noData" style="display:none">조건에 맞는 산업체가 없습니다.</div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <strong>서정대학교 2026년 국제 학생 채용박람회</strong><br>
+  본 대시보드는 구글 시트와 연동되어 자동으로 업데이트됩니다.<br>
+  데이터 문의: 취업지원팀 &nbsp;|&nbsp; Seojeong University Career Support Center
+</footer>
+
+<script>
+// ──────────────────────────────────────────────
+// Google Apps Script 웹 앱 URL (CORS 해결)
+// ──────────────────────────────────────────────
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz1GtCX_HvzDdsoaLwBPSEzjeCX79sBZPKPxUjnnjbdES1baa9e_uF7ZHX9yg3ZLtS_/exec';
+
+// ──────────────────────────────────────────────
+// 지역별 좌표 매핑
+// ──────────────────────────────────────────────
+const COORDS = {
+  '고양시':   [37.658, 126.832],
+  '안산시':   [37.322, 126.831],
+  '동두천시': [37.904, 127.060],
+  '양주시':   [37.785, 127.045],
+  '파주시':   [37.760, 126.780],
+  '송파구':   [37.514, 127.106],
+  '포천시':   [37.894, 127.200],
+  '경기중기청':[37.410, 127.520],
+  '화성시':   [37.199, 126.831],
+  '부산 강서구':[35.130, 128.900],
+  '안성시':   [37.007, 127.280],
+  '안양시':   [37.394, 126.956],
+  '성남시':   [37.419, 127.127],
+  '천안시':   [36.815, 127.113],
+  '강남구':   [37.517, 127.047],
+  '의정부':   [37.738, 127.044],
+  '영등포구': [37.526, 126.896],
+  '양천구':   [37.517, 126.866],
+  '시흥시':   [37.380, 126.803],
+  '각 지점':  [37.540, 126.980],
+};
+
+let allRows = [];
+let activeFilter = 'all';
+let chartInstances = {};
+let mapInstance = null;
+let markers = [];
+
+
+
+// ──────────────────────────────────────────────
+// 고유 산업체 (번호+이름 기준) 추출
+// ──────────────────────────────────────────────
+function uniqueCompanies(rows) {
+  const seen = new Set();
+  return rows.filter(r => {
+    const k = r.no + '|' + r.name;
+    if (seen.has(k)) return false;
+    seen.add(k); return true;
+  });
+}
+
+// ──────────────────────────────────────────────
+// 메트릭 업데이트
+// ──────────────────────────────────────────────
+function updateMetrics(rows) {
+  const companies = uniqueCompanies(rows);
+  const direct = companies.filter(r => r.type === '직접').length;
+  const indirect = companies.filter(r => r.type === '간접').length;
+  const totalRecruit = rows.reduce((s, r) => s + r.recruit, 0);
+  const sessionCount = companies.filter(r => r.session === '실시').length;
+  const totalInterview = companies.reduce((s, r) => s + (r.interview || 0), 0);
+
+  document.getElementById('m1').textContent = companies.length + '개사';
+  document.getElementById('m1sub').textContent = `직접 ${direct}개 / 간접 ${indirect}개`;
+  document.getElementById('m2').textContent = totalRecruit + '명';
+  document.getElementById('m2sub').textContent = `${rows.length}개 직무 합산`;
+  document.getElementById('m3').textContent = sessionCount + '개사';
+  document.getElementById('m4').textContent = totalInterview + '명';
+}
+
+// ──────────────────────────────────────────────
+// 차트 업데이트 (고유 산업체 기준)
+// ──────────────────────────────────────────────
+function updateCharts(rows) {
+  const companies = uniqueCompanies(rows);
+
+  // 차트1: 직접/간접
+  const direct = companies.filter(r => r.type === '직접').length;
+  const indirect = companies.filter(r => r.type === '간접').length;
+  document.getElementById('leg1').innerHTML = `
+    <span class="legend-item"><span class="legend-dot" style="background:#1B2F5E"></span>직접참여 ${direct}개</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#C0006A"></span>간접참여 ${indirect}개</span>`;
+  renderChart('c1', 'doughnut', ['직접참여','간접참여'], [direct, indirect], ['#1B2F5E','#C0006A']);
+
+  // 차트2: 시간대
+  const am = companies.filter(r => r.time === '오전').length;
+  const pm = companies.filter(r => r.time === '오후').length;
+  const ind = companies.filter(r => r.time === '간접').length;
+  document.getElementById('leg2').innerHTML = `
+    <span class="legend-item"><span class="legend-dot" style="background:#1B2F5E"></span>오전 ${am}개</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#C0006A"></span>오후 ${pm}개</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#8A9BBF"></span>간접 ${ind}개</span>`;
+  renderChart('c2', 'pie', ['오전(10~12시)','오후(13~15시)','간접참여'], [am, pm, ind], ['#1B2F5E','#C0006A','#8A9BBF']);
+
+  // 차트3: 추천기관 (고유 산업체 기준)
+  const orgMap = {};
+  companies.forEach(r => {
+    const key = r.org || '기타';
+    orgMap[key] = (orgMap[key] || 0) + 1;
+  });
+  const orgSorted = Object.entries(orgMap).sort((a,b) => b[1]-a[1]);
+  renderBarChart('c3', orgSorted.map(x=>x[0]), orgSorted.map(x=>x[1]), '#1B2F5E', true);
+
+  // 차트4: 모집분야별 (고유 산업체 기준 → 각 직무별 recruit)
+  const fieldMap = {};
+  rows.forEach(r => {
+    // 각 행이 각 직무를 나타내므로 그대로 합산
+    const key = r.field || '기타';
+    fieldMap[key] = (fieldMap[key] || 0) + r.recruit;
+  });
+  const fieldSorted = Object.entries(fieldMap).sort((a,b) => b[1]-a[1]).slice(0,10);
+  renderBarChart('c4', fieldSorted.map(x=>x[0]), fieldSorted.map(x=>x[1]), '#C0006A', true);
+}
+
+function renderChart(id, type, labels, data, colors) {
+  if (chartInstances[id]) chartInstances[id].destroy();
+  const ctx = document.getElementById(id).getContext('2d');
+  chartInstances[id] = new Chart(ctx, {
+    type,
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+  });
+}
+
+function renderBarChart(id, labels, data, color, horizontal) {
+  if (chartInstances[id]) chartInstances[id].destroy();
+  const ctx = document.getElementById(id).getContext('2d');
+  chartInstances[id] = new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets: [{ data, backgroundColor: color, borderRadius: 4, borderSkipped: false }] },
+    options: {
+      indexAxis: horizontal ? 'y' : 'x',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { font: { size: 11 }, stepSize: 1 } },
+        y: { grid: { display: false }, ticks: { font: { size: 11 }, color: '#4A5568' } }
+      }
+    }
+  });
+}
+
+// ──────────────────────────────────────────────
+// 지도 업데이트
+// ──────────────────────────────────────────────
+function updateMap(rows) {
+  if (!mapInstance) {
+    mapInstance = L.map('map', {
+      zoomControl: true,
+      preferCanvas: false
+    }).setView([37.0, 127.5], 7);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 18,
+      crossOrigin: true
+    }).addTo(mapInstance);
+
+    // 범례
+    const legend = L.control({ position: 'bottomright' });
+    legend.onAdd = () => {
+      const d = L.DomUtil.create('div', 'map-legend');
+      d.innerHTML = `
+        <div style="display:flex;align-items:center;gap:7px;color:#1B2F5E;margin-bottom:4px">
+          <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#1B2F5E;border:2px solid white;outline:1.5px solid #1B2F5E"></span>직접참여
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;color:#C0006A">
+          <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#C0006A;border:2px solid white;outline:1.5px solid #C0006A"></span>간접참여
+        </div>`;
+      return d;
+    };
+    legend.addTo(mapInstance);
+
+    // 여러 타이밍에 invalidateSize 호출 (확실하게)
+    setTimeout(() => mapInstance.invalidateSize(), 100);
+    setTimeout(() => mapInstance.invalidateSize(), 500);
+    setTimeout(() => mapInstance.invalidateSize(), 1500);
+  }
+
+  // 기존 마커 제거
+  markers.forEach(m => m.remove());
+  markers = [];
+
+  const companies = uniqueCompanies(rows);
+
+  companies.forEach(r => {
+    if (!r.coord) return;
+    const color = r.type === '직접' ? '#1B2F5E' : '#C0006A';
+    const icon = L.divIcon({
+      className: '',
+      html: `<div style="width:14px;height:14px;border-radius:50%;background:${color};border:2.5px solid white;box-shadow:0 1px 5px rgba(0,0,0,0.35);cursor:pointer"></div>`,
+      iconSize: [14,14],
+      iconAnchor: [7,7],
+      popupAnchor: [0,-7]
+    });
+
+    // 같은 산업체의 모든 직무 모아서 팝업에 표시
+    const sameCo = rows.filter(x => x.no === r.no && x.name === r.name);
+    const fieldRows = sameCo.map(x =>
+      `<div style="padding:4px 0;border-bottom:1px solid #f0f2f6;display:flex;justify-content:space-between;gap:8px">
+        <span style="font-size:11px;color:#4A5568;flex-shrink:0">${x.field}</span>
+        <span style="font-size:11px;color:#1B2F5E;font-weight:500;text-align:right">${x.duty} (${x.recruit}명)</span>
+      </div>`
+    ).join('');
+
+    const interviewText = r.interview > 0 ? `${r.interview}명` : '미집계';
+    const popup = `
+      <div class="popup-inner">
+        <div class="popup-name">${r.no}. ${r.name}</div>
+        <div class="popup-row">
+          <span class="popup-label">주소</span>
+          <span class="popup-val">${r.addr || r.loc}</span>
+        </div>
+        <div class="popup-row">
+          <span class="popup-label">근무지</span>
+          <span class="popup-val">${r.loc}</span>
+        </div>
+        <div class="popup-row">
+          <span class="popup-label">사업내용</span>
+          <span class="popup-val">${r.biz}</span>
+        </div>
+        <div style="margin:8px 0 4px;font-size:11px;font-weight:700;color:#1B2F5E">모집분야 및 직무</div>
+        ${fieldRows}
+        <div class="popup-row" style="margin-top:8px">
+          <span class="popup-label">면접예정</span>
+          <span class="popup-val highlight">${interviewText}</span>
+        </div>
+        <div class="popup-row">
+          <span class="popup-label">추천기관</span>
+          <span class="popup-val">${r.org}</span>
+        </div>
+        ${r.session === '실시' ? `<span class="popup-badge">📋 기업설명회 실시 ${r.sesTime ? '· ' + r.sesTime : ''}</span>` : ''}
+      </div>`;
+
+    const m = L.marker(r.coord, { icon })
+      .addTo(mapInstance)
+      .bindPopup(popup, { maxWidth: 280 })
+      .bindTooltip(r.name, {
+        permanent: false,
+        direction: 'top',
+        offset: [0, -10],
+        className: 'company-tooltip'
+      });
+    markers.push(m);
+  });
+
+  // 마커 추가 후 bounds 맞추기
+  if (markers.length > 0) {
+    const group = L.featureGroup(markers);
+    mapInstance.fitBounds(group.getBounds().pad(0.1));
+  }
+  mapInstance.invalidateSize();
+}
+
+// ──────────────────────────────────────────────
+// 테이블 업데이트
+// ──────────────────────────────────────────────
+function updateTable(rows) {
+  // 필터 카운트 — 산업체 기준 (고유 산업체)
+  const companies = uniqueCompanies(rows);
+  const directCo = uniqueCompanies(rows.filter(r => r.type === '직접'));
+  const indirectCo = uniqueCompanies(rows.filter(r => r.type === '간접'));
+  const amCo = uniqueCompanies(rows.filter(r => r.time === '오전'));
+  const pmCo = uniqueCompanies(rows.filter(r => r.time === '오후'));
+  const sessionCo = companies.filter(r => r.session === '실시');
+
+  document.getElementById('cnt-all').textContent = companies.length;
+  document.getElementById('cnt-direct').textContent = directCo.length;
+  document.getElementById('cnt-indirect').textContent = indirectCo.length;
+  document.getElementById('cnt-am').textContent = amCo.length;
+  document.getElementById('cnt-pm').textContent = pmCo.length;
+  document.getElementById('cnt-session').textContent = sessionCo.length;
+
+  renderTable();
+}
+
+function renderTable() {
+  const filtered = allRows.filter(r => {
+    if (activeFilter === 'all') return true;
+    if (activeFilter === '직접') return r.type === '직접';
+    if (activeFilter === '간접') return r.type === '간접';
+    if (activeFilter === '오전') return r.time === '오전';
+    if (activeFilter === '오후') return r.time === '오후';
+    if (activeFilter === '설명회') return r.session === '실시';
+    return true;
+  });
+
+  const tb = document.getElementById('tb');
+  const noData = document.getElementById('noData');
+
+  if (filtered.length === 0) {
+    tb.innerHTML = '';
+    noData.style.display = 'block';
+    return;
+  }
+  noData.style.display = 'none';
+
+  tb.innerHTML = filtered.map(r => {
+    const tc = r.type === '직접' ? 'b-navy' : 'b-mag';
+    const tm = r.time === '오전' ? 'b-green' : r.time === '오후' ? 'b-amber' : 'b-gray';
+    const sc = r.session === '실시' ? 'b-mag' : 'b-gray';
+    const iv = r.interview > 0 ? `<strong style="color:var(--magenta)">${r.interview}명</strong>` : '<span style="color:#aaa">—</span>';
+    return `<tr>
+      <td style="text-align:center;font-weight:500;color:var(--gray-500)">${r.no}</td>
+      <td style="font-weight:500">${r.name}</td>
+      <td><span class="badge ${tc}">${r.type}참여</span></td>
+      <td><span class="badge ${tm}">${r.time === '간접' ? '간접' : r.time}</span></td>
+      <td style="color:var(--gray-700);font-size:11px" title="${r.addr||''}">${r.addr || '—'}</td>
+      <td style="color:var(--gray-700)">${r.loc}</td>
+      <td style="color:var(--navy);font-weight:500">${r.field}</td>
+      <td style="color:var(--gray-700);font-size:11px">${r.duty}</td>
+      <td style="text-align:center;font-weight:500;color:var(--navy)">${r.recruit}명</td>
+      <td><span class="badge ${sc}">${r.session}</span></td>
+      <td style="text-align:center">${iv}</td>
+      <td style="font-size:10px;color:var(--gray-500)">${r.org}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ──────────────────────────────────────────────
+// 필터 버튼 이벤트
+// ──────────────────────────────────────────────
+document.getElementById('filterRow').addEventListener('click', e => {
+  const btn = e.target.closest('[data-filter]');
+  if (!btn) return;
+  activeFilter = btn.dataset.filter;
+  document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+});
+
+// ──────────────────────────────────────────────
+// 메인 데이터 로드 함수
+// ──────────────────────────────────────────────
+function parseSheetJSON(data) {
+  // Apps Script가 반환하는 2D 배열 파싱
+  // row[0]: 빈줄 or 타이틀, row[1]: 헤더, row[2~]: 데이터
+  const parsed = [];
+  let lastNo = '', lastName = '', lastInterview = 0;
+
+  for (let i = 2; i < data.length; i++) {
+    const r = data[i];
+    if (!r || r.length < 10) continue;
+
+    const noRaw   = String(r[0] || '').trim();
+    const name    = String(r[1] || '').trim();
+    const addr    = String(r[3] || '').trim();  // D열: 주소 (신규)
+    const type    = String(r[4] || '').trim();  // E열: 참여유형
+    const timeFull= String(r[5] || '').trim();  // F열: 참여시간
+    const loc     = String(r[6] || '').trim();  // G열: 근무지
+    const biz     = String(r[7] || '').trim();  // H열: 사업내용
+    const field   = String(r[8] || '').trim();  // I열: 모집분야
+    const duty    = String(r[9] || '').trim();  // J열: 직무내용
+    const recruit = parseInt(r[10]) || 0;       // K열: 모집인원
+    const session = String(r[11] || '').trim(); // L열: 기업설명회 여부
+    const sesTime = String(r[12] || '').trim(); // M열: 기업설명회 시간
+    const org     = String(r[13] || '').trim(); // N열: 추천기관
+    const interviewRaw = parseInt(r[14]) || 0;  // O열: 면접예정인원
+
+    if (!name || name.includes('업데이트 예정') || !field) continue;
+
+    if (noRaw) {
+      lastNo = noRaw;
+      lastName = name;
+      lastInterview = interviewRaw;
+    }
+
+    let time = '간접';
+    if (timeFull.includes('오전')) time = '오전';
+    else if (timeFull.includes('오후')) time = '오후';
+
+    let typeShort = type.includes('직접') ? '직접' : '간접';
+
+    // 좌표: 주소(addr) 우선, 없으면 근무지(loc)로 매핑
+    let coord = COORDS[loc] || null;
+    if (!coord) {
+      for (const [k, v] of Object.entries(COORDS)) {
+        if (loc.includes(k) || k.includes(loc.split(' ')[0])) { coord = v; break; }
+      }
+    }
+    // 주소에서 시/구 추출해서 좌표 보완
+    if (!coord && addr) {
+      for (const [k, v] of Object.entries(COORDS)) {
+        if (addr.includes(k)) { coord = v; break; }
+      }
+    }
+
+    parsed.push({
+      no: noRaw || lastNo,
+      name: noRaw ? name : lastName,
+      type: typeShort, time, loc, addr, biz, field, duty, recruit,
+      session, sesTime, org,
+      interview: noRaw ? interviewRaw : lastInterview,
+      coord,
+    });
+  }
+  return parsed;
+}
+
+function loadData() {
+  const btn = document.getElementById('syncBtn');
+  const statusText = document.getElementById('statusText');
+  btn.classList.add('loading');
+  statusText.textContent = '구글 시트에서 최신 데이터를 불러오는 중...';
+
+  fetch(APPS_SCRIPT_URL)
+    .then(res => {
+      if (!res.ok) throw new Error('fetch failed');
+      return res.json();
+    })
+    .then(data => {
+      allRows = parseSheetJSON(data);
+      if (allRows.length === 0) throw new Error('데이터가 없습니다.');
+
+      updateMetrics(allRows);
+      updateCharts(allRows);
+      updateMap(allRows);
+      updateTable(allRows);
+
+      const now = new Date();
+      const timeStr = now.toLocaleString('ko-KR', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+      document.getElementById('lastUpdated').textContent = `마지막 업데이트: ${timeStr}`;
+      statusText.textContent = `✓ 구글 시트 실시간 연동 완료 — 총 ${uniqueCompanies(allRows).length}개 산업체`;
+      document.getElementById('noticeBar').classList.remove('show');
+    })
+    .catch(err => {
+      console.warn('Google Sheets 로드 실패, 내장 데이터 사용:', err);
+      allRows = FALLBACK_DATA;
+
+      updateMetrics(allRows);
+      updateCharts(allRows);
+      updateMap(allRows);
+      updateTable(allRows);
+
+      const now = new Date();
+      const timeStr = now.toLocaleString('ko-KR', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+      document.getElementById('lastUpdated').textContent = `마지막 업데이트: ${timeStr} (내장 데이터)`;
+      statusText.textContent = `내장 데이터 표시 중 (${uniqueCompanies(allRows).length}개 산업체)`;
+      document.getElementById('noticeText').textContent =
+        '구글 시트 실시간 연동이 일시적으로 불가합니다. 내장 데이터를 표시합니다.';
+      document.getElementById('noticeBar').classList.add('show');
+    })
+    .finally(() => btn.classList.remove('loading'));
+}
+
+// ──────────────────────────────────────────────
+// 내장 데이터 (구글 시트 로드 실패 시 폴백)
+// ──────────────────────────────────────────────
+const FALLBACK_DATA = [
+  {no:'1',name:'우주바이오 주식회사',type:'직접',time:'오전',loc:'고양시',biz:'건강기능식품 제조업',field:'글로벌 영업',duty:'아마존 및 글로벌 채널 영업',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:21,coord:[37.658,126.832]},
+  {no:'2',name:'(주)한영나염',type:'직접',time:'오전',loc:'안산시',biz:'원단 DTP날염',field:'텍스타일 디자이너',duty:'칼라매칭, 배색',recruit:3,session:'미실시',sesTime:'',org:'중진공북부',interview:8,coord:[37.322,126.831]},
+  {no:'2',name:'(주)한영나염',type:'직접',time:'오전',loc:'안산시',biz:'원단 DTP날염',field:'오퍼레이터',duty:'디지털프린터기 운용',recruit:3,session:'미실시',sesTime:'',org:'중진공북부',interview:8,coord:[37.324,126.833]},
+  {no:'3',name:'주식회사 고퍼우드',type:'직접',time:'오전',loc:'동두천시',biz:'악기제조업',field:'공장관리',duty:'중국현지공장 조율',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:4,coord:[37.904,127.060]},
+  {no:'4',name:'와이디 영덕물산(주)',type:'직접',time:'오후',loc:'동두천시',biz:'원단염색 및 가공',field:'생산',duty:'염색 및 가공생산',recruit:2,session:'미실시',sesTime:'',org:'중진공북부',interview:8,coord:[37.894,127.050]},
+  {no:'5',name:'풍아산업(주)',type:'직접',time:'오후',loc:'안산시',biz:'화학섬유 염색가공',field:'염색기사',duty:'섬유 염색기 운전',recruit:2,session:'미실시',sesTime:'',org:'중진공북부',interview:7,coord:[37.318,126.820]},
+  {no:'6',name:'주식회사협성그룹',type:'직접',time:'오전',loc:'양주시',biz:'의류원단 제조',field:'영업부',duty:'내수 및 해외영업',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:6,coord:[37.785,127.045]},
+  {no:'6',name:'주식회사협성그룹',type:'직접',time:'오전',loc:'양주시',biz:'의류원단 제조',field:'생산부',duty:'현장근무',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:6,coord:[37.787,127.047]},
+  {no:'7',name:'에이에스엘몰',type:'직접',time:'오후',loc:'파주시',biz:'피규어, 완구',field:'디자인',duty:'컴퓨터 응용, 디자인',recruit:3,session:'미실시',sesTime:'',org:'중진공북부',interview:0,coord:[37.760,126.780]},
+  {no:'8',name:'신성씨앤에스 주식회사',type:'직접',time:'오후',loc:'양주시',biz:'강관, 창호보강재',field:'포장 관리',duty:'생산 및 제품 포장',recruit:2,session:'미실시',sesTime:'',org:'중진공북부',interview:5,coord:[37.790,127.055]},
+  {no:'9',name:'주식회사 예진',type:'직접',time:'오전',loc:'송파구',biz:'AI Portal/API Solution',field:'프론트엔드 개발자',duty:'유지보수, 데이터 처리',recruit:2,session:'미실시',sesTime:'',org:'중진공북부',interview:0,coord:[37.514,127.106]},
+  {no:'9',name:'주식회사 예진',type:'직접',time:'오전',loc:'송파구',biz:'AI Portal/API Solution',field:'데이터사이언티스트',duty:'E2E 서비스 통합 지원',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:0,coord:[37.516,127.108]},
+  {no:'10',name:'주식회사 노나',type:'직접',time:'오전',loc:'양주시',biz:'침구류 제조 및 도소매',field:'현장직',duty:'침구제조 현장 근무',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:8,coord:[37.800,127.060]},
+  {no:'11',name:'㈜금성이엔씨',type:'직접',time:'오후',loc:'양주시',biz:'소방자재, 건식PD',field:'캐드도면',duty:'캐드도면 및 생산자동화기계관리',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:0,coord:[37.786,127.042]},
+  {no:'12',name:'영진산업(주)',type:'직접',time:'오후',loc:'포천시',biz:'수성접착제, 섬유용계면활성제',field:'생산직',duty:'생산직',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:0,coord:[37.894,127.200]},
+  {no:'13',name:'주식회사 한국유체',type:'직접',time:'오전',loc:'파주시',biz:'공기압축기 제조',field:'무역',duty:'수입자재 발주',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:0,coord:[37.755,126.775]},
+  {no:'13',name:'주식회사 한국유체',type:'직접',time:'오전',loc:'파주시',biz:'공기압축기 제조',field:'영업지원',duty:'영업지원, 매출관리',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:0,coord:[37.757,126.777]},
+  {no:'13',name:'주식회사 한국유체',type:'직접',time:'오전',loc:'파주시',biz:'공기압축기 제조',field:'구매',duty:'자재 입출고 및 재고관리',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:0,coord:[37.759,126.779]},
+  {no:'13',name:'주식회사 한국유체',type:'직접',time:'오전',loc:'파주시',biz:'공기압축기 제조',field:'서비스',duty:'기계 정기점검 및 유지보수',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:0,coord:[37.761,126.781]},
+  {no:'14',name:'(주)포스텍',type:'직접',time:'오전',loc:'파주시',biz:'식품포장필름',field:'입출부',duty:'생산보조',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:0,coord:[37.763,126.783]},
+  {no:'14',name:'(주)포스텍',type:'직접',time:'오전',loc:'파주시',biz:'식품포장필름',field:'가공부',duty:'생산보조',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:0,coord:[37.765,126.785]},
+  {no:'15',name:'(주)영일교육시스템',type:'직접',time:'오전',loc:'양주시',biz:'교육용실험장비 제조 및 도소매',field:'3D프린터 수리',duty:'3D프린터 수리',recruit:1,session:'미실시',sesTime:'',org:'중진공북부',interview:0,coord:[37.795,127.050]},
+  {no:'16',name:'㈜케이에스에프',type:'직접',time:'오후',loc:'포천시',biz:'식품',field:'해외영업(식품)',duty:'해외영업',recruit:1,session:'미실시',sesTime:'',org:'경기중기청',interview:20,coord:[37.900,127.195]},
+  {no:'17',name:'대영써스텍',type:'간접',time:'간접',loc:'화성시',biz:'반도체 부품 가공',field:'금속절삭가공',duty:'절삭 프로그램 운영',recruit:2,session:'미실시',sesTime:'',org:'기타',interview:0,coord:[37.199,126.831]},
+  {no:'18',name:'삼성 화이바 세라믹',type:'간접',time:'간접',loc:'부산 강서구',biz:'월풀/욕조/세면기 생산',field:'몰드·코팅·생산',duty:'몰드, 코팅, 생산',recruit:2,session:'미실시',sesTime:'',org:'기타',interview:2,coord:[35.130,128.900]},
+  {no:'19',name:'백상에스티',type:'간접',time:'간접',loc:'화성시',biz:'스텐레스 절단 가공',field:'스텐레스 절단 가공',duty:'스텐레스 절단 가공',recruit:3,session:'미실시',sesTime:'',org:'기타',interview:0,coord:[37.204,126.826]},
+  {no:'20',name:'서울테크',type:'간접',time:'간접',loc:'화성시',biz:'반도체부품장비',field:'반도체부품장비',duty:'반도체부품장비',recruit:0,session:'미실시',sesTime:'',org:'기타',interview:0,coord:[37.210,126.835]},
+  {no:'21',name:'신화엔지니어링',type:'직접',time:'오전',loc:'안성시',biz:'제조업',field:'자동차 기술(판금도장)',duty:'판금, 도장',recruit:2,session:'미실시',sesTime:'',org:'스마트모빌리티과',interview:0,coord:[37.007,127.280]},
+  {no:'21',name:'신화엔지니어링',type:'직접',time:'오전',loc:'안성시',biz:'제조업',field:'자동차 기술(정비)',duty:'정비',recruit:1,session:'미실시',sesTime:'',org:'스마트모빌리티과',interview:0,coord:[37.009,127.282]},
+  {no:'22',name:'주식회사 한강자동차',type:'직접',time:'오전',loc:'안성시',biz:'자동차종합수리',field:'자동차 판금도장',duty:'판금, 도장',recruit:2,session:'실시',sesTime:'11:00~12:00',org:'스마트모빌리티과',interview:0,coord:[37.012,127.285]},
+  {no:'22',name:'주식회사 한강자동차',type:'직접',time:'오전',loc:'안성시',biz:'자동차종합수리',field:'자동차 정비',duty:'정비',recruit:1,session:'실시',sesTime:'11:00~12:00',org:'스마트모빌리티과',interview:0,coord:[37.014,127.287]},
+  {no:'23',name:'동양프론테크',type:'직접',time:'오전',loc:'안양시',biz:'기계장비 조립용 플라스틱',field:'자동차 기술(판금도장)',duty:'판금, 도장',recruit:1,session:'미실시',sesTime:'',org:'스마트모빌리티과',interview:0,coord:[37.394,126.956]},
+  {no:'23',name:'동양프론테크',type:'직접',time:'오전',loc:'안양시',biz:'기계장비 조립용 플라스틱',field:'자동차 기술(정비)',duty:'정비',recruit:1,session:'미실시',sesTime:'',org:'스마트모빌리티과',interview:0,coord:[37.396,126.958]},
+  {no:'24',name:'비지니스코칭',type:'직접',time:'오전',loc:'성남시',biz:'응용 소프트웨어 개발',field:'자동차 제조',duty:'자동화 라인',recruit:4,session:'미실시',sesTime:'',org:'스마트모빌리티과',interview:0,coord:[37.419,127.127]},
+  {no:'25',name:'제이스터1급 중기자동차공업사',type:'직접',time:'오전',loc:'안성시',biz:'자동차 종합 수리업',field:'자동차 판금도장',duty:'판금, 도장',recruit:2,session:'미실시',sesTime:'',org:'스마트모빌리티과',interview:0,coord:[37.016,127.289]},
+  {no:'25',name:'제이스터1급 중기자동차공업사',type:'직접',time:'오전',loc:'안성시',biz:'자동차 종합 수리업',field:'자동차 정비',duty:'정비',recruit:1,session:'미실시',sesTime:'',org:'스마트모빌리티과',interview:0,coord:[37.018,127.291]},
+  {no:'26',name:'더좋은코리아',type:'직접',time:'오전',loc:'천안시',biz:'이우철 한방누룽지삼계탕',field:'조리',duty:'주방보조 및 조리',recruit:1,session:'미실시',sesTime:'',org:'호텔외식조리과',interview:19,coord:[36.815,127.113]},
+  {no:'27',name:'(주)전한 강강술래',type:'직접',time:'오후',loc:'강남구',biz:'외식업',field:'조리',duty:'조리업무',recruit:2,session:'실시',sesTime:'13:00~14:00',org:'호텔외식조리과',interview:19,coord:[37.517,127.047]},
+  {no:'28',name:'HK노엘제과점',type:'직접',time:'오전',loc:'양주시',biz:'제과점 영업',field:'생산직',duty:'오븐, 반죽 성형',recruit:1,session:'미실시',sesTime:'',org:'호텔외식조리과',interview:19,coord:[37.792,127.048]},
+  {no:'28',name:'HK노엘제과점',type:'직접',time:'오전',loc:'양주시',biz:'제과점 영업',field:'판매직',duty:'판매',recruit:1,session:'미실시',sesTime:'',org:'호텔외식조리과',interview:19,coord:[37.794,127.050]},
+  {no:'29',name:'나블리 베이커리 카페',type:'간접',time:'간접',loc:'양주시',biz:'제과점업',field:'제품 생산',duty:'제품 생산',recruit:1,session:'미실시',sesTime:'',org:'호텔외식조리과',interview:0,coord:[37.798,127.052]},
+  {no:'30',name:'주식회사 정미작소',type:'간접',time:'간접',loc:'양주시',biz:'베이커리, 카페',field:'바리스타',duty:'바리스타',recruit:1,session:'미실시',sesTime:'',org:'호텔외식조리과',interview:0,coord:[37.793,127.043]},
+  {no:'30',name:'주식회사 정미작소',type:'간접',time:'간접',loc:'양주시',biz:'베이커리, 카페',field:'베이커리 생산',duty:'베이커리 생산',recruit:1,session:'미실시',sesTime:'',org:'호텔외식조리과',interview:0,coord:[37.795,127.045]},
+  {no:'30',name:'주식회사 정미작소',type:'간접',time:'간접',loc:'양주시',biz:'베이커리, 카페',field:'디자인',duty:'SNS 관리',recruit:1,session:'미실시',sesTime:'',org:'호텔외식조리과',interview:0,coord:[37.797,127.047]},
+  {no:'31',name:'(주) 태경',type:'직접',time:'오후',loc:'양주시',biz:'원단수출, DTP',field:'DTP',duty:'디지털프린팅',recruit:2,session:'실시',sesTime:'14:00~15:00',org:'글로벌섬유패션',interview:5,coord:[37.782,127.038]},
+  {no:'32',name:'(주)두성텍스타일',type:'간접',time:'간접',loc:'동두천시',biz:'섬유염색임가공',field:'염색기사',duty:'레피드기계 운용',recruit:1,session:'미실시',sesTime:'',org:'글로벌섬유패션',interview:4,coord:[37.898,127.055]},
+  {no:'33',name:'리엔장성형외과(ATIUM)',type:'직접',time:'오후',loc:'각 지점',biz:'성형외과, 피부과',field:'의료통역 코디네이터',duty:'의료통역 코디네이터',recruit:3,session:'실시',sesTime:'15:00~15:30',org:'의료코디네이션과',interview:7,coord:[37.562,126.975]},
+  {no:'34',name:'서울신세계안과의원',type:'직접',time:'오후',loc:'의정부',biz:'의료',field:'외래간호',duty:'외래간호 업무',recruit:1,session:'미실시',sesTime:'',org:'의료코디네이션과',interview:7,coord:[37.738,127.044]},
+  {no:'34',name:'서울신세계안과의원',type:'직접',time:'오후',loc:'의정부',biz:'의료',field:'고객응대팀',duty:'접수, 수납, 재증명',recruit:1,session:'미실시',sesTime:'',org:'의료코디네이션과',interview:7,coord:[37.740,127.046]},
+  {no:'35',name:'메디허브아시아',type:'직접',time:'오후',loc:'영등포구',biz:'중증질환 컨시어지',field:'의료통역사',duty:'의료통역 및 컨시어지',recruit:2,session:'실시',sesTime:'15:30~16:00',org:'의료코디네이션과',interview:7,coord:[37.526,126.896]},
+  {no:'36',name:'서울척병원',type:'직접',time:'오후',loc:'의정부',biz:'의료서비스업',field:'원무팀',duty:'접수, 수납',recruit:1,session:'미실시',sesTime:'',org:'의료코디네이션과',interview:7,coord:[37.742,127.047]},
+  {no:'36',name:'서울척병원',type:'직접',time:'오후',loc:'의정부',biz:'의료서비스업',field:'진료협력센터',duty:'진료의뢰, 회송',recruit:1,session:'미실시',sesTime:'',org:'의료코디네이션과',interview:7,coord:[37.744,127.049]},
+  {no:'37',name:'OGAGO',type:'직접',time:'오후',loc:'양천구',biz:'의료관광',field:'의료관광행정',duty:'의료관광통역',recruit:1,session:'미실시',sesTime:'',org:'의료코디네이션과',interview:7,coord:[37.517,126.866]},
+  {no:'38',name:'K의료관광협회',type:'직접',time:'오후',loc:'양천구',biz:'의료관광',field:'의료관광행정',duty:'의료관광통역',recruit:1,session:'미실시',sesTime:'',org:'의료코디네이션과',interview:7,coord:[37.519,126.869]},
+  {no:'39',name:'블루닉스(주)',type:'간접',time:'간접',loc:'안산시',biz:'상업용 냉장고, 제빙기',field:'조립 및 가공',duty:'제품조립 및 철판가공',recruit:1,session:'미실시',sesTime:'',org:'글로벌산업공학과',interview:0,coord:[37.315,126.835]},
+  {no:'40',name:'(주) 비산이앤씨',type:'직접',time:'오후',loc:'화성시',biz:'구조용 금속 배관 기계 설비',field:'용접·제관',duty:'용접 및 제품 조립',recruit:3,session:'미실시',sesTime:'',org:'글로벌산업공학과',interview:0,coord:[37.195,126.828]},
+  {no:'41',name:'(주) 오토젠',type:'간접',time:'간접',loc:'시흥시',biz:'경량화 차체부품 및 금형',field:'해외개발',duty:'개발 프로젝트 관리',recruit:1,session:'미실시',sesTime:'',org:'글로벌산업공학과',interview:0,coord:[37.380,126.803]},
+  {no:'42',name:'이레엔지니어링',type:'직접',time:'오후',loc:'화성시',biz:'반도체 배관설비 제조',field:'용접·제관',duty:'용접 및 제품 조립',recruit:1,session:'미실시',sesTime:'',org:'글로벌산업공학과',interview:0,coord:[37.202,126.820]},
+  {no:'43',name:'정우산기(주)',type:'직접',time:'오후',loc:'천안시',biz:'에너지 저장장치 제조',field:'용접·제관',duty:'용접 및 제품 조립',recruit:3,session:'미실시',sesTime:'',org:'글로벌산업공학과',interview:0,coord:[36.820,127.118]},
+];
+
+// 초기 로드
+loadData();
+
+// 5분마다 자동 새로고침
+setInterval(loadData, 5 * 60 * 1000);
+</script>
+</body>
+</html>
